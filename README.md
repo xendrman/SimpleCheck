@@ -7,3 +7,9 @@ Note: If you only have like 20 accounts to check and have like 1000 proxies like
 to like 15 without a problem. (The checking process takes longer if you higher up that number (1 -> fastes but less accurate)
 
 This tool was made for Windows. If you use Linux, get MART
+
+# Terms and conditions
+- This repository is for educational purposes only
+- You won't use this application/code to attempt to obtain accounts which are NOT yours (bruteforcing, etc...)
+- You won't use this application/code to do anything unlawful or commit crimes
+- I am not responsible for any actions done by people who use this code
