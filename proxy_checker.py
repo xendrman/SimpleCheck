@@ -1,4 +1,6 @@
 import ctypes
+import threading
+import time
 from multiprocessing.dummy import Pool as ThreadPool
 import requests
 import json
@@ -37,11 +39,22 @@ def proxy_check(proxies, type):
 
         except Exception as e:
             stats.invalid += 1
-        ctypes.windll.kernel32.SetConsoleTitleW(
-            "simplecheck by scorpion3013 | " +
-            "Proxies left: " + str(len(proxies) - (stats.invalid + stats.working)) +
-            " | Working: " + str(stats.working) +
-            " | Bad: " + str(stats.invalid))
+
+
+    running = True
+    def titlebar_changer():
+        while running:
+            ctypes.windll.kernel32.SetConsoleTitleW(
+                "simplecheck by scorpion3013 | " +
+                "Proxies left: " + str(len(proxies) - (stats.invalid + stats.working)) +
+                " | Working: " + str(stats.working) +
+                " | Bad: " + str(stats.invalid))
+            time.sleep(0.5)
+
+    t1 = threading.Thread(target=titlebar_changer, args=[])
+    t1.daemon = True
+    t1.start()
+
 
     def thread_starter(numbers, threads=threads):
         pool = ThreadPool(threads)
@@ -55,4 +68,5 @@ def proxy_check(proxies, type):
         for x in range(0, len(proxies)):
             thread_number_list.append(int(x))
         the_focking_threads = thread_starter(thread_number_list, threads)
+    running = False
     print(stats.working, type, "are working")

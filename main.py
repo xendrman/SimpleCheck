@@ -8,10 +8,11 @@ import sys
 import random
 from multiprocessing.dummy import Pool as ThreadPool
 from proxy_checker import proxy_check, threads, proxies_json
+import threading
 
 working_accounts = []
 
-combo_path = input("Where is your accounts/combo file located?\n") or False
+combo_path = input("Where is your accounts/combo file located?\n").replace("\"","") or False
 if not combo_path:
     print("Hey moron, I need to where the focking accounts are to check them...\n")
     input("Press a key to close the program")
@@ -25,7 +26,7 @@ if len(combos) == 0:
 else:
     print(len(combos), "combos/accounts have been loaded\n")
 
-http_proxy_path = input("Where is your http proxy file located? (leave empty if you dont have this type of proxy)\n") or False
+http_proxy_path = input("Where is your http proxy file located? (leave empty if you dont have this type of proxy)\n").replace("\"","") or False
 if http_proxy_path:
     raw_http = [x.strip() for x in open(str(http_proxy_path), "r", encoding="utf8", errors='ignore').readlines() if ":" in x]
     if len(raw_http) == 0:
@@ -34,7 +35,7 @@ if http_proxy_path:
     else:
         print(len(raw_http), "http proxies have been loaded\n")
 
-socks4_proxy_path = input("Where is your socks4 proxy file located? (leave empty if you dont have this type of proxy)\n") or False
+socks4_proxy_path = input("Where is your socks4 proxy file located? (leave empty if you dont have this type of proxy)\n").replace("\"","") or False
 if socks4_proxy_path:
     raw_socks4 = [x.strip() for x in open(str(socks4_proxy_path), "r", encoding="utf8", errors='ignore').readlines() if ":" in x]
     if len(raw_socks4) == 0:
@@ -43,7 +44,7 @@ if socks4_proxy_path:
     else:
         print(len(raw_socks4), "socks4 proxies have been loaded\n")
 
-socks5_proxy_path = input("Where is your socks5 proxy file located? (leave empty if you dont have this type of proxy)\n") or False
+socks5_proxy_path = input("Where is your socks5 proxy file located? (leave empty if you dont have this type of proxy)\n").replace("\"","") or False
 if socks5_proxy_path:
     raw_socks5 = [x.strip() for x in open(str(socks5_proxy_path), "r", encoding="utf8", errors='ignore').readlines() if ":" in x]
     if len(raw_socks5) == 0:
@@ -132,11 +133,22 @@ def check(x):
         except Exception:
             pass
     stats.invalid += 1
-    ctypes.windll.kernel32.SetConsoleTitleW(
+
+
+running = True
+def titlebar_changer():
+    while running:
+
+        ctypes.windll.kernel32.SetConsoleTitleW(
             "simplecheck by scorpion3013 | " +
             "Combos left: " + str(len(combos) - (stats.invalid + stats.working)) +
             " | Working: " + str(stats.working) +
             " | Bad: " + str(stats.invalid))
+        time.sleep(0.5)
+
+t1 = threading.Thread(target=titlebar_changer, args=[])
+t1.daemon = True
+t1.start()
 
 
 def thread_starter(numbers, threads=threads):
@@ -152,7 +164,7 @@ if __name__ == "__main__":
         thread_number_list.append(int(x))
     the_focking_threads = thread_starter(thread_number_list, threads)
 
-
+running = False
 print("Checking complete")
 print("I found: " + str(len(working_accounts)) + " working accounts!")
 
