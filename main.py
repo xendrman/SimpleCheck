@@ -125,23 +125,24 @@ def check(x):
                                    proxies=proxy_dict,
                                    timeout=6).text
             answer_json = json.loads(answer)
-            if bool(answer_json["selectedProfile"]["paid"]):
-                ign = answer_json["selectedProfile"]["name"]
-                uuid = answer_json["selectedProfile"]["id"]
-                if output_format == 1:
-                    if save_variant == 2:
-                        open(file_name, "a").write(f"{combo}\n")
-                    working_accounts.append(combo)
-                if output_format == 2:
-                    if save_variant == 2:
-                        open(file_name, "a").write(f"{combo}:{uuid}\n")
-                    working_accounts.append(combo + ":" + uuid)
-                if output_format == 3:
-                    if save_variant == 2:
-                        open(file_name, "a").write(f"{combo}:{ign}\n")
-                    working_accounts.append(combo + ":" + ign)
-                stats.working += 1
-                return
+            if answer_json.get("selectedProfile"):
+                if answer_json.get("selectedProfile").get("name"):
+                    ign = answer_json["selectedProfile"]["name"]
+                    uuid = answer_json["selectedProfile"]["id"]
+                    if output_format == 1:
+                        if save_variant == 2:
+                            open(file_name, "a").write(f"{combo}\n")
+                        working_accounts.append(combo)
+                    if output_format == 2:
+                        if save_variant == 2:
+                            open(file_name, "a").write(f"{combo}:{uuid}\n")
+                        working_accounts.append(combo + ":" + uuid)
+                    if output_format == 3:
+                        if save_variant == 2:
+                            open(file_name, "a").write(f"{combo}:{ign}\n")
+                        working_accounts.append(combo + ":" + ign)
+                    stats.working += 1
+                    return
         except Exception:
             pass
     stats.invalid += 1
@@ -175,7 +176,7 @@ if __name__ == "__main__":
     for x in range(0, len(combos)):
         thread_number_list.append(int(x))
     the_focking_threads = thread_starter(thread_number_list, threads)
-
+time.sleep(0.7)
 running = False
 print("Checking complete")
 print("I found: " + str(len(working_accounts)) + " working accounts!")
