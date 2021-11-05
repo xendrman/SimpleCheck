@@ -1,5 +1,4 @@
 import ctypes
-
 import requests
 import json
 import os
@@ -12,51 +11,51 @@ import threading
 
 working_accounts = []
 
-combo_path = input("Where is your accounts/combo file located?\n").replace("\"","") or False
+combo_path = input("Combolist / Accounts list location:\n").replace("\"","") or False
 if not combo_path:
-    print("Hey moron, I need to where the focking accounts are to check them...\n")
-    input("Press a key to close the program")
+    print("Hey! You HAVE to put your combolist / accounts list here  \n")
+    input("Press any key key to close the program")
     sys.exit()
 
 combos = [x.strip() for x in open(combo_path, "r", encoding="utf8", errors='ignore').readlines() if ":" in x]
 if len(combos) == 0:
-    print("You dont have any accounts/combos in that text file. Please remember: the format is\nemail:password\nemail:password\nGot it?")
-    input("Press a key to close the program")
+    print("You dont have any accounts/combos in that text file.")
+    input("Press any key to close the program")
     sys.exit()
 else:
-    print(len(combos), "combos/accounts have been loaded\n")
+    print(len(combos), "Combolist / Accounts list successful\n")
 
-http_proxy_path = input("Where is your http proxy file located? (leave empty if you dont have this type of proxy)\n").replace("\"","") or False
+http_proxy_path = input("Https / Http list location:\n").replace("\"","") or False
 if http_proxy_path:
     raw_http = [x.strip() for x in open(str(http_proxy_path), "r", encoding="utf8", errors='ignore').readlines() if ":" in x]
     if len(raw_http) == 0:
-        print("Well, that focking list was empty, hope you knew that.")
+        print("Proxy list MUST be filled")
         print("Just a reminder, the proxy file format is:\nip:port\nip:port")
     else:
-        print(len(raw_http), "http proxies have been loaded\n")
+        print(len(raw_http), "http proxies list loaded successfuly\n")
 
-socks4_proxy_path = input("Where is your socks4 proxy file located? (leave empty if you dont have this type of proxy)\n").replace("\"","") or False
+socks4_proxy_path = input("Socks4 list location:\n").replace("\"","") or False
 if socks4_proxy_path:
     raw_socks4 = [x.strip() for x in open(str(socks4_proxy_path), "r", encoding="utf8", errors='ignore').readlines() if ":" in x]
     if len(raw_socks4) == 0:
-        print("Well, that focking list was empty, hope you knew that.")
+        print("Proxy list MUST be filled")
         print("Just a reminder, the proxy file format is:\nip:port\nip:port")
     else:
-        print(len(raw_socks4), "socks4 proxies have been loaded\n")
+        print(len(raw_socks4), "socks4 proxies list loaded successfuly\n")
 
-socks5_proxy_path = input("Where is your socks5 proxy file located? (leave empty if you dont have this type of proxy)\n").replace("\"","") or False
+socks5_proxy_path = input("Socks5 list location:\n").replace("\"","") or False
 if socks5_proxy_path:
     raw_socks5 = [x.strip() for x in open(str(socks5_proxy_path), "r", encoding="utf8", errors='ignore').readlines() if ":" in x]
     if len(raw_socks5) == 0:
-        print("Well, that focking list was empty, hope you knew that.")
+        print("Proxy list MUST be filled")
         print("Just a reminder, the proxy file format is:\nip:port\nip:port")
     else:
-        print(len(raw_socks5), "socks5 proxies have been loaded\n")
+        print(len(raw_socks5), "socks5 proxies list loaded successfuly\n")
 
 
 if not any([http_proxy_path, socks4_proxy_path, socks5_proxy_path]):
-    print("This program will be closed cause you focking need proxies.\nGet some proxies.")
-    input("Press a key to close the program")
+    print("This program will be closed cause you need proxies.\nGet some proxies!")
+    input("Press any key to close the program")
     sys.exit()
 
 
@@ -184,4 +183,4 @@ print("I found: " + str(len(working_accounts)) + " working accounts!")
 
 if save_variant == 1:
     open(file_name, "w").write("\n".join(working_accounts))
-input("Done uwu\n")
+input("Done\n")

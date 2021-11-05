@@ -4,8 +4,8 @@ import time
 from multiprocessing.dummy import Pool as ThreadPool
 import requests
 import json
-threads = int(input("How many theads should be used? Default: 100 \n") or "100")
-
+threads = int(input("How many theads should be used? (Default is 100) \n") or "100")
+tmout = int(input("what timeout should be used? (Default is 5s) \n") or "5")
 proxies_json = {}
 def proxy_check(proxies, type):
     class stats:
@@ -29,7 +29,7 @@ def proxy_check(proxies, type):
                 'https': "socks5://" + proxy
             }
         try:
-            r = requests.get(url="http://azenv.net/", proxies=proxy_dict, timeout=5).text
+            r = requests.get(url="http://azenv.net/", proxies=proxy_dict, timeout=tmout).text
             if r.__contains__("REQUEST_METHOD"):
                 proxies_json[proxy] = {}
                 proxies_json[proxy]["type"] = type
@@ -45,10 +45,10 @@ def proxy_check(proxies, type):
     def titlebar_changer():
         while running:
             ctypes.windll.kernel32.SetConsoleTitleW(
-                "simplecheck by scorpion3013 | " +
-                "Proxies left: " + str(len(proxies) - (stats.invalid + stats.working)) +
-                " | Working: " + str(stats.working) +
-                " | Bad: " + str(stats.invalid))
+                "simplecheck by scorpion3013, edited by xemulated | " +
+                "Unchecked Proxies: " + str(len(proxies) - (stats.invalid + stats.working)) +
+                " | Working Proxies: " + str(stats.working) +
+                " | Bad Proxies: " + str(stats.invalid))
             time.sleep(0.5)
 
     t1 = threading.Thread(target=titlebar_changer, args=[])

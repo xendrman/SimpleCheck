@@ -1,3 +1,6 @@
+# Info
+This is only FORK of original scorpion3013 release
+
 # SimpleCheck
 simple video tutorial: https://streamable.com/or4yn
 
@@ -13,3 +16,4 @@ This tool was made for Windows. If you use Linux, get MART
 - You won't use this application/code to attempt to obtain accounts which are NOT yours (bruteforcing, etc...)
 - You won't use this application/code to do anything unlawful or commit crimes
 - I am not responsible for any actions done by people who use this code
+
